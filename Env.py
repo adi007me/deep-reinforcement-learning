@@ -18,6 +18,7 @@ class CabDriver():
     def __init__(self):
         """initialise your state and define your action space and state space"""
         self.action_space = [(0,0)] + [(i,j) for i in range(m) for j in range(m) if i != j]
+        # print(f'action space: {self.action_space}')
         self.state_space = [(i,j,k) for i in range(m) for j in range(t) for k in range(d)]
         self.state_init = random.choice(self.state_space)
         self.poisson_dist = [2, 12, 4, 7, 8]
@@ -66,7 +67,7 @@ class CabDriver():
 
         actions = [self.action_space[i] for i in possible_actions_index]
 
-        actions.append([0,0])
+        actions.append((0,0))
 
         return possible_actions_index, actions
 
@@ -114,12 +115,9 @@ class CabDriver():
         time = int(t)
         day = d
         # if new time > 23, its next day. add 1 to day and reset time at 24
-        if time > 23:
-            day = day + 1
-            time = time - 24
-        
-        if day > 6:
-            day = day - 7
+        day = day + time // 24
+        time = time % 24
+        day = day % 7
 
         return time, day
 
